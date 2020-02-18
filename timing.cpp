@@ -1,97 +1,264 @@
 #include <iostream>
 #include <time.h>
 #include "arraylist.cpp"
+#include "pointerlist.cpp"
+#include "arraystack.cpp"
+#include "pointerstack.cpp"
 #include <list>
-#include <stack>       
+#include <stack>
+#include <iostream>
+#include <time.h>
 
 int main()
- {
-     /* Array tests */
-    Array *L = new Array;
-    L->length = 0;
+   {
+      std::cout << "*****Timing for arraylist*****\n\n";
+      /* Array tests */
+      Array *L = new Array;
+         L->length = 0;
 
-    clock_t;
-    /* time insertion in front */
-    double t = clock();
-    for (int i = 1; i < 100; i++)
-    {
-        INSERT(i, 0, L);
-    }
-    t = clock() - t;
-    double t_in_sec = (t) / CLOCKS_PER_SEC;
-    std::cout << "Insertion in front: " << t_in_sec << "\n";
+      /* time insertion in front */
+      double t = clock();
+      for (int i = 1; i < 100; i++)
+      {
+          INSERT(i, 0, L);
+      }
+      t = clock() - t;
+      double t_in_sec = (t) / CLOCKS_PER_SEC;
+      std::cout << "arraylist insertion in front: " << t_in_sec << "\n";
 
-    for (int i = 0; i < L->length; i++)
-    {
-        std::cout << L->A[i] << " ";
-    }
+      std::cout << "\n-----------------------------------------------------\n";
 
-    /* time insertion in back */
-    Array *L = new Array;
+       /* time insertion in back */
+        Array *L2 = new Array;
+        t = clock();
+        for (int i = 0; i < 100; i++)
+        {
+
+            INSERT(i+1, i, L2);
+        }
+        t = clock() - t;
+        t_in_sec = (t) / CLOCKS_PER_SEC;
+        std::cout << "\narraylist insertion in back: " << t_in_sec << "\n";
+
+      std::cout << "\n-----------------------------------------------------\n";
+      /* time transversal */
+      t = clock();
+      for (int i = 0; i < L->length; i++)
+      {
+         L->A[i]; 
+      }
+      t = clock() - t;
+      t_in_sec = (t) / CLOCKS_PER_SEC;
+      std::cout << "\narraylist transversal: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";
+
+      /* deletion from front */
+      int len = L->length;
+      t = clock();
+      for (int i = 0; i < len; i++)
+      {
+          DELETE(0, L);
+      }
+      t = clock() - t;
+      t_in_sec = (t) / CLOCKS_PER_SEC;
+      std::cout << "\narraylist deletion from front: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";
+		/* deletion from back */
+      t = clock();
+      for (int i=1; i <100; i++)
+      {  int l = L2->length-1;
+          DELETE(l, L2);
+      }
+      t = clock() - t;
+      t_in_sec = (t) / CLOCKS_PER_SEC;
+      std::cout << "\narraylist deletion from back: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";
+		
+		std::cout << "*****Timing for pointerlist*****\n\n";
+
+		LIST *L3=new LIST;
+    	/* time insertion in front */
+    	t = clock();
+     	for (int i=1; i<100; i++){
+         INSERT(i,0,L3);
+     	}
+    	t = clock()-t;
+     	t_in_sec = (t)/CLOCKS_PER_SEC;
+      std::cout << "\npointerlist insertion in front: " << t_in_sec << "\n";
+		std::cout << "\n-----------------------------------------------------\n";	
+    	
+		/* time insertion at back */
+    	MAKENULL(L3);
+    	t = clock();
+    	for (int i=1; i<100; i++){
+
+         INSERT(i,i-1,L3);
+     	}
+     	t = clock()-t;
+     	t_in_sec = (t)/CLOCKS_PER_SEC;
+     	std::cout << "\npointerlist insertion in back: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";  
+
+		/* transversal through linked list */
+     	NODE *tmp = new NODE;
+     	tmp=L3->head;
+     	t = clock();
+     	while(tmp != NULL){
+         tmp=tmp->next;
+     	}
+    	t = clock()-t;
+    	t_in_sec = (t)/CLOCKS_PER_SEC;
+    	std::cout << "\npointerlist transversal: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";  
+		/* deletion from the front linked list */
+    	t = clock();
+    	while(L3->head != NULL){
+        DELETE(0,L3);
+    	}
+    	t = clock()-t;
+    	t_in_sec = (t)/CLOCKS_PER_SEC;
+    	std::cout << "\npointerlist deletion from front: " << t_in_sec << "\n";
+    	std::cout << "\n-----------------------------------------------------\n";  
+		/* deletion from the end linked list */
+    	for (int i=1; i<100; i++){
+         INSERT(i,0,L3);
+    	}
+    	t = clock();
+    	for(int i=99; i>=0; i--)
+        	DELETE(i,L3);
+    	t = clock()-t;
+    	t_in_sec = (t)/CLOCKS_PER_SEC;
+    	std::cout << "\npointerlist deletion from end: " << t_in_sec << "\n";
+		std::cout << "\n-----------------------------------------------------\n";
+
+		std::cout << "*****Timing for C++ library list*****\n\n";
+		std::list<int> L4;
+		t = clock();
+		for (int i=1; i<100; i++){
+			L4.push_front(i);
+		}
+		t = clock()-t;
+		t_in_sec = (t)/CLOCKS_PER_SEC;
+		std::cout << "\nC++ builtin list insertion in front: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";		
+		L4.clear();
+     	t = clock();
+     	for (int i=1; i<100; i++){
+         L4.push_back(i);
+     	}
+     	t = clock()-t;
+     	t_in_sec = (t)/CLOCKS_PER_SEC;
+		std::cout << "\nC++ builtin list insertion in back: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";
+
+		t = clock();
+		for (std::list<int>::iterator it=L4.begin(); it != L4.end(); ++it)
+		t = clock()-t;
+		t_in_sec = (t)/CLOCKS_PER_SEC;
+		std::cout << "\nC++ builtin list transversal: " << t_in_sec << "\n";
+      std::cout << "\n-----------------------------------------------------\n";
+
+		/* delete elements from front of list */
+    	t = clock();
+     	for (int i=1; i<100; i++){
+         L4.pop_front();
+     	}
+     	t = clock()-t;
+     	t_in_sec = (t)/CLOCKS_PER_SEC;
+		std::cout << "\nC++ builtin list deletion from front: " << t_in_sec << "\n";
+        std::cout << "\n-----------------------------------------------------\n";
+    /* delete elements from back of list */
+    for (int i=1; i<100; i++){
+         L4.push_back(i);
+     }
+     t = clock();
+     for (int i=1; i<100; i++){
+         L4.pop_back();
+     }
+     t = clock()-t;
+     t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\nC++ builtin list deletion from back: " << t_in_sec << "\n";
+          std::cout << "\n-----------------------------------------------------\n";
+
+
+std::cout << "*****Timing for arraystack*****\n\n";
+
+ASTACK *S=new ASTACK;
+    S->length=0;
+    /* time PUSH() */
     t = clock();
-    for (int i = 1; i < 100; i++)
+    for (int i=1; i<=99; i++)
     {
-        int l = L->length;
-        INSERT(i, l, L);
+        PUSH(i,S);
     }
     t = clock() - t;
-    t_in_sec = (t) / CLOCKS_PER_SEC;
-    std::cout << "\nInsertion in back array: " << t_in_sec << "\n";
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\narraystack PUSH(): " << t_in_sec << "\n";
+            std::cout << "\n-----------------------------------------------------\n";
 
-    for (int i = 0; i < L->length; i++)
+     /* time POP() */
+     t = clock();
+     for (int i=1; i<=99; i++)
     {
-        std::cout << L->A[i] << " ";
+        POP(S);
     }
+    t = clock() - t;
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\narraystack POP(): " << t_in_sec << "\n";
+            std::cout << "\n-----------------------------------------------------\n";
+  std::cout << "*****Timing for pointerstack*****\n\n";
 
-    /* time transversal */
+STACK *S2 = new STACK;
+    S2->top=NULL;
+    /* time PUSH() */
     t = clock();
-    for (int i = 0; i <= L->length; i++)
+    for (int i=1; i<=99; i++)
     {
-        L->A[i];
+        PUSH(i,S2);
     }
     t = clock() - t;
-    t_in_sec = (t) / CLOCKS_PER_SEC;
-    std::cout << "\nTransversal of array: " << t_in_sec << "\n";
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\npointerstack PUSH(): " << t_in_sec << "\n";
+              std::cout << "\n-----------------------------------------------------\n";
 
-    for (int i = 0; i < L->length; i++)
+
+     /* time POP() */
+     t = clock();
+     for (int i=1; i<=99; i++)
     {
-        std::cout << L->A[i] << " ";
+        POP(S2);
     }
+    t = clock() - t;
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\npointerstack POP(): " << t_in_sec << "\n";
+              std::cout << "\n-----------------------------------------------------\n";
 
-    /* deletion from front */
+  std::cout << "*****Timing for C++ builtin stack*****\n\n";
+std::stack<int> S3;
+
+
+    /* time PUSH() */
     t = clock();
-    int len = L->length;
-    for (int i = 0; i <= len; i++)
+    for (int i=1; i<=99; i++)
     {
-        DELETE(0, L);
+        S3.push(i);
     }
     t = clock() - t;
-    t_in_sec = (t) / CLOCKS_PER_SEC;
-    std::cout << "\nDeletion from front: " << t_in_sec << "\n";
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+    std::cout << "\nC++ Stack PUSH(): " << t_in_sec << "\n";
+                std::cout << "\n-----------------------------------------------------\n";
 
-    for (int i = 0; i < L->length; i++)
-    {
-        std::cout << L->A[i] << " ";
-    }
 
-    /* deletion from back */
-    for (int i = 1; i < 100; i++)
-    {
-        int l = L->length;
-        INSERT(i, l, L);
-    }
+    /* time POP() */
     t = clock();
-    int l = L->length;
-    for (int i = 0; i <= l; i++)
+    for (int i=1; i<=99; i++)
     {
-        DELETE(0, L);
+        S3.pop();
     }
     t = clock() - t;
-    t_in_sec = (t) / CLOCKS_PER_SEC;
-    std::cout << "\nDeletion from back: " << t_in_sec;
+    t_in_sec = (t)/CLOCKS_PER_SEC;
+std::cout << "\nC++ stack POP(): " << t_in_sec << "\n";
+                std::cout << "\n-----------------------------------------------------\n";
 
-    for (int i = 0; i < L->length; i++)
-    {
-        std::cout << L->A[i] << " ";
-    }
- }
+
+}
