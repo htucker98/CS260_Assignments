@@ -3,7 +3,7 @@
 
 struct ASTACK
 {
-    int A[1000];
+    int A[1000000];
     int length;
 };
 
